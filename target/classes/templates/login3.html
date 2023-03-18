@@ -1,0 +1,33 @@
+Copy code
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My App</title>
+</head>
+<body>
+<div th:if="${not #authentication.isAuthenticated()}">
+    <h1>Login</h1>
+    <form th:action="@{/login}" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Log in">
+    </form>
+
+    <h2>Or</h2>
+
+    <div>
+        <a th:href="@{/oauth2/authorization/google}">
+            <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png">
+        </a>
+    </div>
+</div>
+
+<div th:if="${#authentication.isAuthenticated()}">
+    <h1>Welcome back, <span th:text="${#authentication.name}"></span></h1>
+    <a th:href="@{/logout}">Log out</a>
+</div>
+</body>
+</html>

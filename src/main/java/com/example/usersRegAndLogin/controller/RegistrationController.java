@@ -45,53 +45,53 @@ public class RegistrationController {
 
 
     @PostMapping("/user/registration")
-    public GenericResponse registerUserAccount(@RequestBody @Valid final UserDto accountDto, final HttpServletRequest request) {
+    public GenericResponse registerUserAccount(@RequestBody final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.registerNewUserAccount(accountDto);
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
+//        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
         return new GenericResponse("success");
     }
 
-    @PostMapping("/user/resetPassword")
-    public GenericResponse resetPassword(final HttpServletRequest request, @RequestParam("email") final String userEmail) {
-        final User user = userService.findUserByEmail(userEmail);
-        if (user != null) {
-            final String token = UUID.randomUUID().toString();
-            userService.createPasswordResetTokenForUser(user, token);
-            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
-        }
-        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
-    }
+//    @PostMapping("/user/resetPassword")
+//    public GenericResponse resetPassword(final HttpServletRequest request, @RequestParam("email") final String userEmail) {
+//        final User user = userService.findUserByEmail(userEmail);
+//        if (user != null) {
+//            final String token = UUID.randomUUID().toString();
+//            userService.createPasswordResetTokenForUser(user, token);
+//            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
+//        }
+//        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
+//    }
 
-    @PostMapping("/user/updatePassword")
-    public GenericResponse changeUserPassword(final Locale locale, @Valid PasswordDto passwordDto) {
+//    @PostMapping("/user/updatePassword")
+//    public GenericResponse changeUserPassword(final Locale locale, @Valid PasswordDto passwordDto) {
+//
+//        final User user = userService.findUserByEmail(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
+//        if (!userService.checkIfValidOldPassword(user, passwordDto.getOldPassword())) {
+//            throw new InvalidOldPasswordException();
+//        }
+//
+//        userService.changeUserPassword(user, passwordDto.getNewPassword());
+//        return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
+//    }
 
-        final User user = userService.findUserByEmail(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
-        if (!userService.checkIfValidOldPassword(user, passwordDto.getOldPassword())) {
-            throw new InvalidOldPasswordException();
-        }
+//    private String getAppUrl(HttpServletRequest request) {
+//        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+//    }
 
-        userService.changeUserPassword(user, passwordDto.getNewPassword());
-        return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
-    }
+//    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+//        final String url = contextPath + "/user/changePassword?token=" + token;
+//        final String message = messages.getMessage("message.resetPassword", null, locale);
+//        return constructEmail("Reset Password", message + " \r\n" + url, user);
+//    }
 
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
-
-    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
-        final String url = contextPath + "/user/changePassword?token=" + token;
-        final String message = messages.getMessage("message.resetPassword", null, locale);
-        return constructEmail("Reset Password", message + " \r\n" + url, user);
-    }
-
-    private SimpleMailMessage constructEmail(String subject, String body, User user) {
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject(subject);
-        email.setText(body);
-        email.setTo(user.getEmail());
-        email.setFrom(env.getProperty("support.email"));
-        return email;
-    }
+//    private SimpleMailMessage constructEmail(String subject, String body, User user) {
+//        final SimpleMailMessage email = new SimpleMailMessage();
+//        email.setSubject(subject);
+//        email.setText(body);
+//        email.setTo(user.getEmail());
+//        email.setFrom(env.getProperty("support.email"));
+//        return email;
+//    }
 }

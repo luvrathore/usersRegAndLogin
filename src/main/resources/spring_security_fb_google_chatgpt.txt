@@ -141,3 +141,10 @@ Light mode
 Updates & FAQ
 Log out
 New chat
+
+
+{"firstName" :"Vilas",
+"lastName":"asd",
+"email":"kalravilas01@gmail.com",
+"password":"ASDF@#@F@1",
+"matchingPassword":"ASDF@#@F@1"}
